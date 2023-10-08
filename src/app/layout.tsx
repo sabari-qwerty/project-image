@@ -19,8 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className={inter.className + " w-[90%] mx-auto"}>
+        <body
+          className={
+            inter.className + " w-[90%] mx-auto flex flex-col space-y-6"
+          }
+        >
           <NavBar />
+
           {children}
         </body>
       </UserProvider>

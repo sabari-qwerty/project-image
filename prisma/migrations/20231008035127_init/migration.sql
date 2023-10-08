@@ -1,10 +1,9 @@
 -- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
-    "name" TEXT,
-    "email" TEXT,
-    "role" TEXT,
-    "upload_count" INTEGER,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "role" TEXT NOT NULL DEFAULT 'user',
     "picture" TEXT NOT NULL,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
@@ -13,8 +12,11 @@ CREATE TABLE "user" (
 -- CreateTable
 CREATE TABLE "image" (
     "id" TEXT NOT NULL,
-    "email" TEXT,
-    "image_url" TEXT,
+    "email" TEXT NOT NULL,
+    "image_url" TEXT NOT NULL,
 
     CONSTRAINT "image_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");

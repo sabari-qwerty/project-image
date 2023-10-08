@@ -1,12 +1,48 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Image from "next/image";
-import { FC } from "react";
+import axios from "axios";
+import { Underdog } from "next/font/google";
+import Link from "next/link";
+import { FC, useEffect, useState } from "react";
 
 export const NavBar: FC = () => {
   const { user, error, isLoading } = useUser();
+
+  const [role, setRole] = useState("user");
+
+  const createUser = async () => {
+    const data = {
+      name: user?.name,
+      email: user?.email,
+      picture: user?.picture,
+    };
+
+    const _data = await axios.post("/api/user/update", data);
+    console.log("update user");
+    console.log(_data.data);
+  };
+
+  const getRole = async (email: string) => {
+    const data = await axios
+      .get(`/api/user/get/single?email=${email}`)
+      .then((data) => setRole(data?.data?.data?.role));
+    console.log("get user");
+  };
+
+  useEffect(() => {
+    createUser();
+
+    return () => undefined;
+  }, [user?.name]);
+
+  useEffect(() => {
+    getRole(String(user?.email));
+
+    return () => undefined;
+  }, [role, user?.email]);
+
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 z-50">
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl">ImaGe Gallery</a>
       </div>
@@ -30,10 +66,18 @@ export const NavBar: FC = () => {
               </summary>
               <ul className="p-2 bg-base-100">
                 <li>
-                  <a>Link 1</a>
+                  <Link
+                    href="/admin"
+                    className={` ${role == "admin" ? "" : "hidden"} `}
+                  >
+                    Admin
+                  </Link>
                 </li>
                 <li>
-                  <a>Link 2</a>
+                  <Link href="/setting/user">Setting</Link>
+                </li>
+                <li>
+                  <Link href="/gallery">gallery</Link>
                 </li>
               </ul>
             </details>

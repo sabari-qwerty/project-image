@@ -1,3 +1,13 @@
-export default function Home() {
-  return <main></main>;
-}
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { UploadImage } from "./components/UploadImage";
+
+export default withPageAuthRequired(
+  async function Page() {
+    return (
+      <main>
+        <UploadImage />
+      </main>
+    );
+  },
+  { returnTo: "/" }
+);

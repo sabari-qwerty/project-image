@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState, ChangeEvent, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   getStorage,
@@ -11,11 +11,15 @@ import {
 import { storage } from "../../../firebaseConfig";
 import axios from "axios";
 
+import { useUser } from "@auth0/nextjs-auth0/client";
+
 export const UploadImage: FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [downloadURl, setDownloadURL] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [progressUpload, setProgressUpload] = useState(0);
+
+  const { isLoading, user, error } = useUser();
 
   const handleSelectedFile = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -30,6 +34,7 @@ export const UploadImage: FC = () => {
   const upload = async (url: string) => {
     const data = {
       img: url,
+      email: user?.email,
     };
 
     await axios.post("/api/image/upload", data);
@@ -81,23 +86,27 @@ export const UploadImage: FC = () => {
     return () => undefined;
   }, [imageFile]);
   return (
-    <div className="flex flex-col space-y-4">
-      <input
-        type="file"
-        placeholder="Select file to upload"
-        className="file-input w-full "
-        accept="imahe/png"
-        onChange={(file) => handleSelectedFile(file)}
-      />
+    <>
+      <div className="flex flex-col space-y-4">
+        <input
+          type="file"
+          placeholder="Select file to upload"
+          className="file-input w-full "
+          accept="imahe/png"
+          onChange={(file) => handleSelectedFile(file)}
+        />
 
-      <div>
-        {progressUpload != 0 && progressUpload != 100 && (
-          <progress className="progress w-full"></progress>
-        )}
+        <div>
+          {progressUpload != 0 && progressUpload != 100 && (
+            <progress className="progress w-full"></progress>
+          )}
+        </div>
+        <div>
+          {downloadURl && (
+            <img src={downloadURl} alt="data" className="w-full" />
+          )}
+        </div>
       </div>
-      <div>
-        {downloadURl && <img src={downloadURl} alt="data" className="w-full" />}
-      </div>
-    </div>
+    </>
   );
 };
