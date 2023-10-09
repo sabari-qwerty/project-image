@@ -2,6 +2,9 @@
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { AdminGallary } from "./GallaryPage/AdminGallary";
+import { UserGallary } from "./GallaryPage/UserGallary";
 
 interface data {
   id: string;
@@ -11,39 +14,20 @@ interface data {
   picture: string;
 }
 export const GallaryPage: FC = () => {
-  const [user, setUser] = useState([]);
-
-  const getAllUser = async () => {
-    await axios
-      .get("/api/user/get/all")
-      .then((data) => setUser(data.data.data));
+  const { user, error, isLoading } = useUser();
+  const [role, setRole] = useState("user");
+  const getRole = async (email: string) => {
+    const data = await axios
+      .get(`/api/user/get/single?email=${email}`)
+      .then((data) => setRole(data?.data?.data?.role));
   };
-
   useEffect(() => {
-    getAllUser();
+    getRole(String(user?.email));
 
     return () => undefined;
-  }, []);
-  return (
-    <div className="flex space-x-8">
-      {user.map((data: data, key) => {
-        return (
-          <Link
-            href={`/gallery/${data.id}`}
-            className="card w-96 bg-base-100 shadow-xl "
-            key={key}
-          >
-            <figure>
-              <img src={data.picture} alt="user" className="w-full" />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">{data.name.split("@")[0]}!</h2>
-              <p>{data.email}</p>
-              <p>{data.role}</p>
-            </div>
-          </Link>
-        );
-      })}
-    </div>
-  );
+  }, [role, user?.email]);
+
+  if (role === "admin") return <AdminGallary role={role} />;
+
+  return <UserGallary />;
 };
