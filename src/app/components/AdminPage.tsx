@@ -1,6 +1,6 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import axios, { all } from "axios";
+import axios  from "axios";
 import { FC, useState, useEffect } from "react";
 
 interface AdminPage {
