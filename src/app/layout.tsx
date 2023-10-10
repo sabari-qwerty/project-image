@@ -1,3 +1,9 @@
+export const dynamic = "auto";
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";

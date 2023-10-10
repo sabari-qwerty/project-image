@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { usePathname } from "next/navigation";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
