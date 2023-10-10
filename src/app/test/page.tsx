@@ -1,3 +1,4 @@
+export const dynamic = "auto";
 import { FC } from "react";
 import { TestPage } from "../components/TestPage";
 

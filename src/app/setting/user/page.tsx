@@ -1,8 +1,4 @@
 export const dynamic = "auto";
-export const revalidate = false;
-export const fetchCache = "auto";
-export const runtime = "nodejs";
-export const preferredRegion = "auto";
 
 import { SettingPage } from "@/app/components/SettingPage";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
