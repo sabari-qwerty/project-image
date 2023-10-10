@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { NavBar } from "./components/NavBar";
+import Provider from "@/utils/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,15 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body
-          className={
-            inter.className + " w-[90%] mx-auto flex flex-col space-y-6"
-          }
-        >
-          <NavBar />
+        <Provider>
+          <body
+            className={
+              inter.className + " w-[90%] mx-auto flex flex-col space-y-6"
+            }
+          >
+            <NavBar />
 
-          {children}
-        </body>
+            {children}
+          </body>
+        </Provider>
       </UserProvider>
     </html>
   );

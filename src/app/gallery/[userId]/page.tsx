@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 interface data {
   id: string;
@@ -11,27 +12,23 @@ interface data {
 export default function Page() {
   const router = usePathname();
 
-  const [allImage, setAllImage] = useState([]);
-
   const id = router.split("/").splice(-1)[0];
 
   const getAllImage = async () => {
-    await axios
-      .get(`/api/image/user/all?id=${id}`)
-      .then((res) => setAllImage(res.data.data));
+    return await axios.get(`/api/image/user/all?id=${id}`);
   };
 
-  useEffect(() => {
-    getAllImage();
+  const useQueryGetAllImage = useQuery({
+    queryKey: ["GetAllImage"],
+    queryFn: () => getAllImage(),
+  });
 
-    return () => undefined;
-  }, [allImage]);
+  if (useQueryGetAllImage.isLoading) return <>Loading</>;
 
-  if (!allImage.length) return <>no image</>;
-
+  if (!useQueryGetAllImage.data?.data?.data) return <>no image</>;
   return (
     <main className="container">
-      {allImage.map((data: data, key) => (
+      {useQueryGetAllImage.data?.data?.data.map((data: data, key: number) => (
         <img src={data.image_url} alt="img" key={key} />
       ))}
     </main>
