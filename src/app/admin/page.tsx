@@ -31,7 +31,6 @@
 //   { returnTo: "/admin" }
 
 // );
-export const dynamic = "auto";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import React from "react";
 import { AdminPage } from "../components/AdminPage";

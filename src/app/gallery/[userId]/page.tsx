@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "auto";
 
 import React from "react";
 import { usePathname } from "next/navigation";

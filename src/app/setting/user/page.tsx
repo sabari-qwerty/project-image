@@ -1,5 +1,3 @@
-export const dynamic = "auto";
-
 import { SettingPage } from "@/app/components/SettingPage";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import React from "react";
